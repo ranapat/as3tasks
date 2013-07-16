@@ -2,7 +2,7 @@ package org.ranapat.tasks {
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
-	public class TT {
+	internal class TT {
 		
 		public static function log(instance:Object, message:String):void {
 			if (TaskSettings.TT_SHOW_LOG) {
