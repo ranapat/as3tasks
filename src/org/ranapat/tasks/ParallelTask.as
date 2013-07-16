@@ -1,5 +1,4 @@
 package org.ranapat.tasks {
-	import flash.utils.getQualifiedClassName;
 	
 	public class ParallelTask extends Task {
 		public static const TYPE_COMPLETE_ON_LAST:uint = 0;
