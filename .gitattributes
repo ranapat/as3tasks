@@ -1,0 +1,9 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Flash
+*.as text eol=crlf
+*.as3proj text eol=crlf
+*.xml text eol=crlf
+*.php text eol=crlf
+*.js text eol=crlf
