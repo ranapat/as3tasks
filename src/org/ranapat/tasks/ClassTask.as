@@ -69,7 +69,7 @@ package org.ranapat.tasks {
 			_completedMethodName:String,
 			_startMethodName:String = null,
 			_classConsuctorParams:Array = null,
-			 _startMethodParams:Array = null
+			_startMethodParams:Array = null
 		) {
 			super();
 			
