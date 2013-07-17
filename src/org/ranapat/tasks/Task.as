@@ -6,6 +6,8 @@ package org.ranapat.tasks {
 		protected var _progress:uint;
 		
 		public function Task() {
+			Tools.ensureAbstractClass(this, Task);
+			
 			this.generateUID();
 		}
 		
