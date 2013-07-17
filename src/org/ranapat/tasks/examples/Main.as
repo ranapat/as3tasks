@@ -46,7 +46,6 @@ package org.ranapat.tasks.examples {
 			//taskQueue.append(new TimeoutTask(3 * 1000));
 			//taskQueue.append(new TimeoutTask(4 * 1000));
 			
-			
 			//taskQueue.start();
 			//taskQueue.stopAll();
 			
@@ -54,13 +53,13 @@ package org.ranapat.tasks.examples {
 				.push(new CallbackTask(this.callbackMain, "test", "test1"))
 				.push(new TimeoutTask(1 * 1000))
 				.push(ClassTask.getClass(Example))
+				.push(new ParallelTask([new TimeoutTask(.5 * 1000), new TimeoutTask(3.5 * 1000)], ParallelTask.TYPE_COMPLETE_ON_LAST))
+				.push(new CallbackTask(this.callbackMain, "test", "test1"))
 			;
-			
-			
 		}
 		
 		public function callbackMain(param1:String, param2:String):void {
-			trace("I'm here... " + this + " .. " + param1 + " .. " + param2)
+			//trace("I'm here... " + this + " .. " + param1 + " .. " + param2)
 			//TaskFactory.instance.get("someshit").stopAll();
 		}
 	}

@@ -13,7 +13,8 @@ package org.ranapat.tasks {
 			var xMetas:XMLList = xDesc.factory..metadata;
 
 			var xMetaParent:XML;
-			for each(var xMeta:XML in xMetas) {
+			var xMeta:XML
+			for each(xMeta in xMetas) {
 				xMetaParent =  xMeta.parent();
 				if (xMeta.@name.indexOf("__go_to") > -1) {
 					delete xMetaParent.children()[xMeta.childIndex()];
@@ -41,6 +42,23 @@ package org.ranapat.tasks {
 								result.push( xMetaParentMetaItem );
 							}
 						}
+					}
+				}
+			}
+			
+			if (all || member != null) {
+				var xStaticMethods:XMLList = xDesc.method;
+				for each (xMeta in xStaticMethods) {
+					for each (var xMetaSub:XML in xMeta.metadata) {
+						if (xMetaSub.attribute("name").indexOf("__go_to") != -1) {
+							delete xMeta.children()[xMetaSub.childIndex()];
+						}
+					}
+
+					if (all) {
+						result.push(xMeta);
+					} else if (xMeta.attribute("name") == _memberName) {
+						result.push(xMeta);
 					}
 				}
 			}

@@ -22,6 +22,8 @@ package org.ranapat.tasks {
 			
 			this._lazyAutoStart = new Timer(TaskQueueSettings.LAZY_START_TIMEOUT, 1);
 			this._lazyAutoStart.addEventListener(TimerEvent.TIMER, this.handleLazyAutoStartTimer, false, 0, true);
+			
+			TT.log(this, this._uid + " created.");
 		}
 		
 		public function get autostart():Boolean {
@@ -183,14 +185,50 @@ package org.ranapat.tasks {
 			var queue:Vector.<Task> = this._queue;
 			var length:uint = queue.length;
 			var tmp:Task;
-			for (var i:uint = 0; i < length && result; ++i) {
+			var i:uint;
+
+			queue = _queue;
+			length = queue.length;
+			for (i = 0; i < length && result; ++i) {
 				tmp = queue[i];
 				result = this.checkTaskTolerance(task, tmp, TaskToleranceCodes.PENDING, TaskToleranceCodes.WAITING);
 			}
 			
 			if (result) {
 				task.appendOnComplete(this.onComplete);
-				this._queue.push(task);
+				
+				queue = this._queue;
+				length = queue.length;
+				if (length > 0) {
+					var desiredPosition:uint = length;
+
+					for (i = length - 1; i >= 0 && i < length; --i) {
+						tmp = queue[i];
+						var priorityA:uint = task.priority(tmp, i, desiredPosition);
+						var priorityB:uint = tmp.priority(task, desiredPosition, i);
+
+						if (priorityA == TaskPriorityCodes.DONT_MOVE || priorityB == TaskPriorityCodes.DONT_MOVE) {
+							break;
+						} else if (
+								priorityA == TaskPriorityCodes.BEFORE
+								&& (
+										priorityB == TaskPriorityCodes.DONT_MIND
+										|| priorityB == TaskPriorityCodes.AFTER
+								)
+						) {
+							desiredPosition = i;
+						} else if (
+								priorityA == TaskPriorityCodes.DONT_MIND
+								&& priorityB == TaskPriorityCodes.AFTER
+						) {
+							desiredPosition = i;
+						}
+					}
+
+					this._queue.splice(desiredPosition, 0, task);
+				} else {
+					this._queue.push(task);
+				}
 				
 				TT.log(this, task.uid + " accepted in the queue.");
 			}
@@ -202,14 +240,14 @@ package org.ranapat.tasks {
 			var result:Boolean = true;
 			
 			if (
-				taskA.tollerance(taskB, statusB) == TaskToleranceCodes.ACCEPT
+				taskA.tollerance(taskB, statusB, statusA) == TaskToleranceCodes.ACCEPT
 			) {
 				if (
-					taskB.tollerance(taskA, statusA) == TaskToleranceCodes.ACCEPT
+					taskB.tollerance(taskA, statusA, statusB) == TaskToleranceCodes.ACCEPT
 				) {
 					//result = true;
 				} else if (
-					taskB.tollerance(taskA, statusA) == TaskToleranceCodes.REJECT_SELF
+					taskB.tollerance(taskA, statusA, statusB) == TaskToleranceCodes.REJECT_SELF
 				) {
 					TT.log(this, taskB.uid + " as " + TaskToleranceCodes.statusToString(statusB) + " removed because of " + taskA.uid + " as " + TaskToleranceCodes.statusToString(statusA) + ".");
 					this.stopByTask(taskB);
@@ -217,7 +255,7 @@ package org.ranapat.tasks {
 					//result = true;
 				} else {
 					if (
-						taskB.tollerance(taskA, statusA) == TaskToleranceCodes.REJECT_BOTH
+						taskB.tollerance(taskA, statusA, statusB) == TaskToleranceCodes.REJECT_BOTH
 					) {
 						TT.log(this, taskB.uid + " as " + TaskToleranceCodes.statusToString(statusB) + " removed because of " + taskA.uid + " as " + TaskToleranceCodes.statusToString(statusA) + ".");
 						this.stopByTask(taskB);
@@ -227,11 +265,11 @@ package org.ranapat.tasks {
 					result = false;
 				}
 			} else if (
-				taskA.tollerance(taskB, statusB) == TaskToleranceCodes.REJECT_OTHER
+				taskA.tollerance(taskB, statusB, statusA) == TaskToleranceCodes.REJECT_OTHER
 			) {
 				if (
-					taskB.tollerance(taskA, statusA) == TaskToleranceCodes.REJECT_OTHER
-					|| taskB.tollerance(taskA, statusA) == TaskToleranceCodes.REJECT_BOTH
+					taskB.tollerance(taskA, statusA, statusB) == TaskToleranceCodes.REJECT_OTHER
+					|| taskB.tollerance(taskA, statusA, statusB) == TaskToleranceCodes.REJECT_BOTH
 				) {
 					TT.log(this, taskA.uid + " as " + TaskToleranceCodes.statusToString(statusA) + " rejected from queue because of " + taskB.uid + " as " + TaskToleranceCodes.statusToString(statusB) + ".");
 					result = false;
@@ -242,12 +280,12 @@ package org.ranapat.tasks {
 				TT.log(this, taskB.uid + " as " + TaskToleranceCodes.statusToString(statusB) + " removed because of " + taskA.uid + " as " + TaskToleranceCodes.statusToString(statusA) + ".");
 				this.stopByTask(taskB);
 			} else if (
-				taskA.tollerance(taskB, statusB) == TaskToleranceCodes.REJECT_SELF
+				taskA.tollerance(taskB, statusB, statusA) == TaskToleranceCodes.REJECT_SELF
 			) {
 				TT.log(this, taskA.uid + " as " + TaskToleranceCodes.statusToString(statusA) + " rejected from queue because of " + taskB.uid + " as " + TaskToleranceCodes.statusToString(statusB) + ".");
 				result = false;
 			} else if (
-				taskA.tollerance(taskB, statusB) == TaskToleranceCodes.REJECT_BOTH
+				taskA.tollerance(taskB, statusB, statusA) == TaskToleranceCodes.REJECT_BOTH
 			) {
 				TT.log(this, taskB.uid + " as " + TaskToleranceCodes.statusToString(statusB) + " removed because of " + taskA.uid + " as " + TaskToleranceCodes.statusToString(statusA) + ".");
 				this.stopByTask(taskB);

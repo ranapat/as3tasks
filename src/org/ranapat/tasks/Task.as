@@ -1,8 +1,9 @@
 package org.ranapat.tasks {
 	
-	internal class Task {
+	public class Task {
 		private var _uid:Number;
-		private var _progress:uint;
+		
+		protected var _progress:uint;
 		
 		public function Task() {
 			this.generateUID();
@@ -21,8 +22,12 @@ package org.ranapat.tasks {
 			return this._progress;
 		}
 		
-		public function tollerance(other:Task, status:uint):uint {
+		public function tollerance(other:Task, otherStatus:uint, myStatus:uint):uint {
 			return TaskToleranceCodes.ACCEPT;
+		}
+
+		public function priority(other:Task, otherPosition:uint, myPosition:uint):uint {
+			return TaskPriorityCodes.DONT_MIND;
 		}
 		
 		public function get uid():Number {
