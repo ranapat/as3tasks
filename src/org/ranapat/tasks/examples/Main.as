@@ -8,6 +8,7 @@ package org.ranapat.tasks.examples {
 	import org.ranapat.tasks.TaskFactory;
 	import org.ranapat.tasks.TaskQueue;
 	import org.ranapat.tasks.TimeoutTask;
+	import org.ranapat.tasks.TimerTask;
 	
 	public class Main extends Sprite {
 		
@@ -55,11 +56,12 @@ package org.ranapat.tasks.examples {
 				.push(ClassTask.getClass(Example))
 				.push(new ParallelTask([new TimeoutTask(.5 * 1000), new TimeoutTask(3.5 * 1000)], ParallelTask.TYPE_COMPLETE_ON_LAST))
 				.push(new CallbackTask(this.callbackMain, "test", "test1"))
+				.push(new TimerTask(1000, 4, this.callbackMain, "t", "tt"))
 			;
 		}
 		
 		public function callbackMain(param1:String, param2:String):void {
-			//trace("I'm here... " + this + " .. " + param1 + " .. " + param2)
+			trace("I'm here... " + this + " .. " + param1 + " .. " + param2)
 			//TaskFactory.instance.get("someshit").stopAll();
 		}
 	}
