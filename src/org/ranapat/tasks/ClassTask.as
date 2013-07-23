@@ -78,9 +78,9 @@ package org.ranapat.tasks {
 			_class:Class,
 			_completedMethodName:String,
 			_startMethodName:String = null,
-			__toleranceMethodName:String = null,
-			__priorityMethodName:String = null,
-			_classConsuctorParams:Array = null,
+			_toleranceMethodName:String = null,
+			_priorityMethodName:String = null,
+			_classConstructorParams:Array = null,
 			_startMethodParams:Array = null
 		) {
 			super();
@@ -88,8 +88,8 @@ package org.ranapat.tasks {
 			this._class = _class;
 			this._classConstructorParams = _classConstructorParams;
 			this._startMethodName = _startMethodName;
-			this._toleranceMethodName = __toleranceMethodName;
-			this._priorityMethodName = __priorityMethodName;
+			this._toleranceMethodName = _toleranceMethodName;
+			this._priorityMethodName = _priorityMethodName;
 			this._startMethodParams = _startMethodParams;
 			this._completedMethodName = _completedMethodName;
 		}
@@ -130,7 +130,7 @@ package org.ranapat.tasks {
 			if (this._completedMethodName) {
 				var _completed:Function = this._instance[this._completedMethodName];
 				var _onCompleted:Function = this.onCompleted;
-				var _instance:* = this._instance;
+				var _instance:Object = this._instance;
 				this._instance[this._completedMethodName] = function (...args):void {
 					_completed.apply(_instance, args);
 					
