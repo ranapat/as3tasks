@@ -46,8 +46,12 @@ package org.ranapat.tasks {
 			}
 		}
 		
-		public function push(task:Task):TaskQueue {
-			this.append(task);
+		public function push(task:Task, toIndex:int = -1):TaskQueue {
+			if (toIndex == -1) {
+				this.append(task);
+			} else {
+				this.appendToIndex(task, toIndex);
+			}
 			
 			return this;
 		}
@@ -73,6 +77,19 @@ package org.ranapat.tasks {
 				}
 			} else {
 				throw new Error("[" + getQualifiedClassName(this) + "] " + this._uid + " already destroyed.");
+			}
+		}
+		
+		public function appendToIndex(task:Task, index:uint):Number {
+			if (this.canProceed) {
+				if (task) {
+					this._queue.splice(index > this._queue.length? this._queue.length : index, 0, task);
+					return task.uid;
+				} else {
+					return 0;
+				}
+			} else {
+				return 0;
 			}
 		}
 		
