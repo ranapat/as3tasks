@@ -8,7 +8,7 @@ package org.ranapat.tasks {
 			super();
 			
 			this._callback = callback;
-			this._args = args;
+			this._args = args.length == 1 && args[0]? args[0] : args;
 		}
 		
 		override public function start():void {

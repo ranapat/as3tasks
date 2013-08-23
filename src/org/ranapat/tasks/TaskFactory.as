@@ -28,6 +28,25 @@ package org.ranapat.tasks {
 			TaskFactory._instance = null;
 		}
 		
+		public function toTask(...args):Task {
+			if (args.length > 0) {
+				if (args[0] is Function) {
+					return new CallbackTask(args.shift(), args);
+				} if (args[0] is uint && args.length == 1) {
+					return new TimeoutTask(args[0]);
+				} else {
+					TT.log(this, "[ " + args + " ] unknown arguments to create task from.");
+					return null;
+				}
+			} else {
+				return null;
+			}
+		}
+		
+		public function auto(name:String):TaskQueue {
+			return this.get(name, true);
+		}
+		
 		public function get(name:String, autostart:Boolean = false):TaskQueue {
 			if (!this._queues[name]) {
 				var tmp:TaskQueue = new TaskQueue(name);

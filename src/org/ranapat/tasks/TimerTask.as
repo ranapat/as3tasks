@@ -16,7 +16,7 @@ package org.ranapat.tasks {
 			this._interval = interval;
 			this._repeat = repeat;
 			this._callback = callback;
-			this._args = args;
+			this._args = args.length == 1 && args[0]? args[0] : args;
 
 			this.timer = new Timer(this._interval, this._repeat);
 			this.timer.addEventListener(TimerEvent.TIMER, this.handleTimer, false, 0, true);

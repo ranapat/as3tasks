@@ -5,8 +5,10 @@ package org.ranapat.tasks.examples {
 	import org.ranapat.tasks.CallbackTask;
 	import org.ranapat.tasks.ClassTask;
 	import org.ranapat.tasks.ParallelTask;
+	import org.ranapat.tasks.Task;
 	import org.ranapat.tasks.TaskFactory;
 	import org.ranapat.tasks.TaskQueue;
+	import org.ranapat.tasks.TF;
 	import org.ranapat.tasks.TimeoutTask;
 	import org.ranapat.tasks.TimerTask;
 	
@@ -49,7 +51,8 @@ package org.ranapat.tasks.examples {
 			
 			//taskQueue.start();
 			//taskQueue.stopAll();
-			
+
+			/*
 			TaskFactory.instance.get("someshit", true)
 				.push(new CallbackTask(this.callbackMain, "test", "test1"))
 				.push(new TimeoutTask(1 * 1000))
@@ -58,6 +61,42 @@ package org.ranapat.tasks.examples {
 				.push(new CallbackTask(this.callbackMain, "test", "test1"))
 				.push(new TimerTask(1000, 4, this.callbackMain, "t", "tt"))
 			;
+			*/
+			
+			/*
+			t1 = TF.toTask(this.callbackTest1)
+			t2 = TF.toTask(this.callbackTest2);
+			
+			trace(t1.uid)
+			trace(t2.uid)
+			
+			TF.auto("ssss")
+				.push(t1)
+				.push(t2)
+			;
+			*/
+			
+			TF.auto("d1")
+				.push(TF.toTask(5 * 1000, 12, 33))
+				.push(new CallbackTask(this.callbackTest1_1, ["a", "b", "c"]))
+				
+			
+		}
+		
+		public var t1:Task;
+		public var t2:Task;
+		
+		public function callbackTest1():void {
+			trace("t1");
+			TF.auto("ssss").appendBeforeTask(TF.toTask(this.callbackTest1_1), t2);
+		}
+		
+		public function callbackTest2():void {
+			trace("t2");
+		}
+		
+		public function callbackTest1_1(...args):void {
+			trace("t1_1 " + args.length + " .. " + args);
 		}
 		
 		public function callbackMain(param1:String, param2:String):void {

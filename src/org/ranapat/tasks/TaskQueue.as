@@ -38,6 +38,10 @@ package org.ranapat.tasks {
 			return this._current == null && this._queue.length == 0;
 		}
 		
+		public function get current():Task {
+			return this._current;
+		}
+		
 		public function start():void {
 			if (this.canProceed) {
 				this.tryNext();
@@ -60,13 +64,9 @@ package org.ranapat.tasks {
 			if (this.canProceed) {
 				if (task) {
 					if (this.tolleranceAppend(task)) {
-						if (
-							!this._started
-							&& this.autostart
-							&& !this._lazyAutoStart.running
-						) {
-							this._lazyAutoStart.start();
-						}
+						task.appendOnComplete(this.onComplete);
+						
+						this.tryToAutoStart();
 						
 						return task.uid;
 					} else {
@@ -84,6 +84,10 @@ package org.ranapat.tasks {
 			if (this.canProceed) {
 				if (task) {
 					this._queue.splice(index > this._queue.length? this._queue.length : index, 0, task);
+					task.appendOnComplete(this.onComplete);
+					
+					this.tryToAutoStart();
+					
 					return task.uid;
 				} else {
 					return 0;
@@ -91,6 +95,52 @@ package org.ranapat.tasks {
 			} else {
 				return 0;
 			}
+		}
+		
+		public function appendAfterUID(task:Task, uid:Number):Number {
+			if (this._current != null && this._current.uid == uid) {
+				return this.appendToIndex(task, 0);
+			} else if (this._queue) {
+				var queue:Vector.<Task> = this._queue;
+				var length:uint = queue.length;
+				for (var i:uint = 0; i < length; ++i) {
+					if (queue[i].uid == uid) {
+						return this.appendToIndex(task, i + 1);
+					}
+				}
+			}
+			return 0;
+		}
+		
+		public function appendAfterTask(task:Task, after:Task):Number {
+			return this.appendAfterUID(task, after.uid);
+		}
+		
+		public function appendAfterCurrent(task:Task):Number {
+			if (this._current) {
+				return this.appendAfterTask(task, this._current);
+			} else {
+				return this.appendToIndex(task, 0);
+			}
+		}
+		
+		public function appendBeforeUID(task:Task, uid:Number):Number {
+			if (this._current != null && this._current.uid == uid) {
+				return this.appendToIndex(task, 0);
+			} else if (this._queue) {
+				var queue:Vector.<Task> = this._queue;
+				var length:uint = queue.length;
+				for (var i:uint = 0; i < length; ++i) {
+					if (queue[i].uid == uid) {
+						return this.appendToIndex(task, i);
+					}
+				}
+			}
+			return 0;
+		}
+		
+		public function appendBeforeTask(task:Task, before:Task):Number {
+			return this.appendBeforeUID(task, before.uid);
 		}
 		
 		public function stopCurrent():Boolean {
@@ -174,6 +224,16 @@ package org.ranapat.tasks {
 			}
 		}
 		
+		protected function tryToAutoStart():void {
+			if (
+				!this._started
+				&& this.autostart
+				&& !this._lazyAutoStart.running
+			) {
+				this._lazyAutoStart.start();
+			}			
+		}
+		
 		protected function tryNext():void {
 			if (this._current == null && this._queue.length > 0) {
 				if (!this._started) {
@@ -212,8 +272,6 @@ package org.ranapat.tasks {
 			}
 			
 			if (result) {
-				task.appendOnComplete(this.onComplete);
-				
 				queue = this._queue;
 				length = queue.length;
 				if (length > 0) {
