@@ -32,6 +32,9 @@ package org.ranapat.tasks {
 			if (args.length > 0) {
 				if (args[0] is Function) {
 					return new CallbackTask(args.shift(), args);
+				} else if (args[0] == undefined && args.length >= 2 && args[1] is Function) {
+					args.shift();
+					return new UndeterminedTask(args.shift(), args);
 				} if (args[0] is uint && args.length == 1) {
 					return new TimeoutTask(args[0]);
 				} else {

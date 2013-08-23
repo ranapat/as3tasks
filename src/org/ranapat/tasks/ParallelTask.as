@@ -56,20 +56,26 @@ package org.ranapat.tasks {
 		protected function onComplete():void {
 			++this._completed;
 			
+			var isComplete:Boolean;
+			
 			if (
 				this._type == ParallelTask.TYPE_COMPLETE_ON_FIRST
 				&& this._completed == 1
 			) {
-				this.completed();
+				isComplete = true;
 			} else if (
 				this._type == ParallelTask.TYPE_COMPLETE_ON_LAST
 				&& this._completed == this._parallels.length
 			) {
-				this.completed();
+				isComplete = true;
 			}
 			
 			if (this._completed == this._parallels.length) {
 				this._parallels = new Vector.<Task>();
+			}
+			
+			if (isComplete) {
+				this.completed();
 			}
 		}
 		

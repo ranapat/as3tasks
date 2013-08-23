@@ -14,13 +14,16 @@ package org.ranapat.tasks {
 		override public function start():void {
 			super.start();
 			
-			if (this._callback != null) {
+			try {
 				this._callback.apply(null, this._args);
+			} catch (e:Error) {
+				TT.log(this, "Callback function cannot be called [ " + e + " ]");
 			}
 			
-			this.completed();
 			this._callback = null;
 			this._args = null;
+			
+			this.completed();
 		}
 	}
 

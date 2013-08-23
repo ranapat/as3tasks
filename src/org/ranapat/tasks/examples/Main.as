@@ -11,6 +11,7 @@ package org.ranapat.tasks.examples {
 	import org.ranapat.tasks.TF;
 	import org.ranapat.tasks.TimeoutTask;
 	import org.ranapat.tasks.TimerTask;
+	import org.ranapat.tasks.UndeterminedTask;
 	
 	public class Main extends Sprite {
 		
@@ -78,7 +79,10 @@ package org.ranapat.tasks.examples {
 			
 			TF.auto("d1")
 				.push(TF.toTask(5 * 1000, 12, 33))
+				//.push(new UndeterminedTask(this.undetermined))
+				.push(TF.toTask(undefined, this.undetermined))
 				.push(new CallbackTask(this.callbackTest1_1, ["a", "b", "c"]))
+				.push(new CallbackTask(this.callbackTest1))
 				
 			
 		}
@@ -86,9 +90,14 @@ package org.ranapat.tasks.examples {
 		public var t1:Task;
 		public var t2:Task;
 		
+		public function undetermined(compel:Number):void {
+			trace("I am undetermined.... " + compel)
+			TF.auto("d1").compel(compel);
+		}
+		
 		public function callbackTest1():void {
 			trace("t1");
-			TF.auto("ssss").appendBeforeTask(TF.toTask(this.callbackTest1_1), t2);
+			//TF.auto("ssss").appendBeforeTask(TF.toTask(this.callbackTest1_1), t2);
 		}
 		
 		public function callbackTest2():void {

@@ -60,6 +60,14 @@ package org.ranapat.tasks {
 			return this;
 		}
 		
+		public function compel(code:Number):Boolean {
+			if (this._current) {
+				return this._current.compel(code);
+			} else {
+				return false;
+			}
+		}
+		
 		public function append(task:Task):Number {
 			if (this.canProceed) {
 				if (task) {
