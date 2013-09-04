@@ -51,13 +51,19 @@ package org.ranapat.tasks {
 		}
 		
 		public function get(name:String, autostart:Boolean = false):TaskQueue {
+			var tmp:TaskQueue;
 			if (!this._queues[name]) {
-				var tmp:TaskQueue = new TaskQueue(name);
+				tmp = new TaskQueue(name);
 				tmp.appendOnComplete(this.onComplete, name);
 				tmp.autostart = autostart;
 				this._queues[name] = tmp;
+			} else {
+				tmp = this._queues[name] as TaskQueue;
+				if (!tmp.running && !tmp.destroyed && !tmp.autostart && autostart) {
+					tmp.autostart = autostart;
+				}
 			}
-			return this._queues[name] as TaskQueue;
+			return tmp;
 		}
 		
 		private function onComplete(name:String):void {

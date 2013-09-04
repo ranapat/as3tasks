@@ -42,6 +42,14 @@ package org.ranapat.tasks {
 			return this._current;
 		}
 		
+		public function get running():Boolean {
+			return this._started && !this._destroyed;
+		}
+		
+		public function get destroyed():Boolean {
+			return this._destroyed;
+		}
+		
 		public function start():void {
 			if (this.canProceed) {
 				this.tryNext();

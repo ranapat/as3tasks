@@ -77,12 +77,24 @@ package org.ranapat.tasks.examples {
 			;
 			*/
 			
+			/*
 			TF.auto("d1")
 				.push(TF.toTask(5 * 1000, 12, 33))
 				//.push(new UndeterminedTask(this.undetermined))
 				.push(TF.toTask(undefined, this.undetermined))
 				.push(new CallbackTask(this.callbackTest1_1, ["a", "b", "c"]))
 				.push(new CallbackTask(this.callbackTest1))
+			*/
+				
+			
+			trace("++++++++++++++ " + TF.get("ffff"))
+			TF.get("ffff")
+				.push(TF.toTask(this.callbackTest1))
+				
+			TF.get("ffff").start()
+				
+			trace("??? " + TF.auto("ffff").complete)
+			//TF.auto("ffff").start()
 				
 			
 		}
