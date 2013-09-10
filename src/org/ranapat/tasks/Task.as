@@ -28,12 +28,18 @@ package org.ranapat.tasks {
 		
 		public function get complete():Boolean {
 			return this._complete;
-		}		
+		}
+		
+		public function get queue():TaskQueue {
+			return TaskQueueMap.instance.get(this);
+		}
 		
 		public function start():void {
 			TT.log(this, this.uid + " started.");
 			this._started = true;
 			this._progress = 0;
+			
+			trace("....................................and here my queue is " + this.queue)
 		}
 		
 		public function stop():Boolean {

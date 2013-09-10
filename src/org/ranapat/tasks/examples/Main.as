@@ -1,6 +1,7 @@
 package org.ranapat.tasks.examples {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.system.System;
 	import flash.utils.Dictionary;
 	import org.ranapat.tasks.CallbackTask;
 	import org.ranapat.tasks.ClassTask;
@@ -25,6 +26,8 @@ package org.ranapat.tasks.examples {
 		private function init(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
+			
+			addEventListener(Event.ENTER_FRAME, enterFrame);
 			
 			trace("we are here");
 			
@@ -115,11 +118,15 @@ package org.ranapat.tasks.examples {
 				.push(TF.toTask(this.callbackTest1))
 				
 			TF.get("ffff").start()
-				
-			trace("??? " + TF.auto("ffff").complete)
+			
+			//trace("??? " + TF.auto("ffff").complete)
 			//TF.auto("ffff").start()
 				
 			
+		}
+		
+		private function enterFrame(e:Event):void {
+			//System.gc();
 		}
 		
 		public var t1:Task;

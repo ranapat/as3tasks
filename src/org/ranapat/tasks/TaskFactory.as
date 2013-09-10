@@ -72,7 +72,6 @@ package org.ranapat.tasks {
 			
 			TT.log(this, name + " removed from queues.");
 		}
-		
 	}
 
 }

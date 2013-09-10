@@ -82,6 +82,8 @@ package org.ranapat.tasks {
 					if (this.tolleranceAppend(task)) {
 						task.appendOnComplete(this.onComplete);
 						
+						TaskQueueMap.instance.set(task, this);
+						
 						this.tryToAutoStart();
 						
 						return task.uid;
@@ -101,6 +103,8 @@ package org.ranapat.tasks {
 				if (task) {
 					this._queue.splice(index > this._queue.length? this._queue.length : index, 0, task);
 					task.appendOnComplete(this.onComplete);
+					
+					TaskQueueMap.instance.set(task, this);
 					
 					this.tryToAutoStart();
 					
