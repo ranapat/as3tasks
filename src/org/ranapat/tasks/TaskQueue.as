@@ -54,7 +54,7 @@ package org.ranapat.tasks {
 			if (this.canProceed) {
 				this.tryNext();
 			} else {
-				throw new Error("[" + getQualifiedClassName(this) + "] " + this._uid + " already destroyed.");
+				//
 			}
 		}
 		
@@ -92,7 +92,7 @@ package org.ranapat.tasks {
 					return 0;
 				}
 			} else {
-				throw new Error("[" + getQualifiedClassName(this) + "] " + this._uid + " already destroyed.");
+				return 0;
 			}
 		}
 		

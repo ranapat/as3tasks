@@ -28,6 +28,29 @@ package org.ranapat.tasks.examples {
 			
 			trace("we are here");
 			
+			
+			
+			var strict:Vector.<Vector.<uint>> = Vector.<Vector.<uint>>([
+				Vector.<uint>([1, 2, 3, 4]),
+				Vector.<uint>([88, 3, 4, 5]),
+				Vector.<uint>([3, 4, 5, 6]),
+				Vector.<uint>([4, 5, 6, 7]),
+			]);
+			var usersCount:uint = strict.length;
+			var roundsCount:uint = strict[0].length;
+
+			var result:Vector.<Vector.<uint>> = new Vector.<Vector.<uint>>(roundsCount, true);
+
+			for (var round:uint = 0; round < roundsCount; ++round) {
+				result[round] = new Vector.<uint>(usersCount, true);
+				for (var user:uint = 0; user < usersCount; ++user) {
+					result[round][user] = strict[user][round];
+				}
+			}
+			
+			trace(result)
+
+			
 			//taskQueue = new TaskQueue();
 			//taskQueue.autostart = true;
 			//taskQueue.append(new ParallelTask(Vector.<Task>([new Task(), new Task()])));
