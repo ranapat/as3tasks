@@ -3,6 +3,7 @@ package org.ranapat.tasks {
 	public class Task {
 		private var _uid:Number;
 		private var _compel:Number;
+		private var _doNotReleaseMe:Boolean;
 		
 		protected var _started:Boolean;
 		protected var _complete:Boolean;
@@ -28,6 +29,14 @@ package org.ranapat.tasks {
 		
 		public function get complete():Boolean {
 			return this._complete;
+		}
+		
+		public function get doNotReleaseMe():Boolean {
+			return this._doNotReleaseMe;
+		}
+		
+		public function set doNotReleaseMe(value:Boolean):void {
+			this._doNotReleaseMe = value;
 		}
 		
 		public function get queue():TaskQueue {

@@ -115,6 +115,7 @@ package org.ranapat.tasks.examples {
 			
 			trace("++++++++++++++ " + TF.get("ffff"))
 			TF.get("ffff")
+				.push(new ExampleReleaseTask())
 				.push(TF.toTask(this.callbackTest1))
 				
 			TF.get("ffff").start()
@@ -126,7 +127,7 @@ package org.ranapat.tasks.examples {
 		}
 		
 		private function enterFrame(e:Event):void {
-			//System.gc();
+			System.gc();
 		}
 		
 		public var t1:Task;

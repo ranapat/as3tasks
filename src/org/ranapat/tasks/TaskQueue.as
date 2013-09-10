@@ -16,6 +16,8 @@ package org.ranapat.tasks {
 		
 		private var _lazyAutoStart:Timer;
 		
+		private var _taskKeeper:Vector.<Task>;
+		
 		public var parameters:Dictionary;
 		
 		public function TaskQueue(uid:String = null) {
@@ -25,6 +27,8 @@ package org.ranapat.tasks {
 			
 			this._lazyAutoStart = new Timer(TaskQueueSettings.LAZY_START_TIMEOUT, 1);
 			this._lazyAutoStart.addEventListener(TimerEvent.TIMER, this.handleLazyAutoStartTimer, false, 0, true);
+			
+			this._taskKeeper = new Vector.<Task>();
 			
 			this.parameters = new Dictionary(true);
 			
@@ -223,6 +227,16 @@ package org.ranapat.tasks {
 			return result;
 		}
 		
+		public function releaseKeeped(task:Task):void {
+			var length:uint = this._taskKeeper.length;
+			for (var i:uint = 0; i < length; ++i) {
+				if (this._taskKeeper[i] == task) {
+					this._taskKeeper.splice(i, 1);
+					break;
+				}
+			}
+		}
+		
 		public function appendOnComplete(callback:Function, ...args):void {
 			var _completed:Function = this.completed;
 			this.completed = function ():void {
@@ -402,7 +416,12 @@ package org.ranapat.tasks {
 		}
 		
 		protected function onComplete():void {
-			this._current = null;
+			if (this._current) {
+				if (this._current.doNotReleaseMe) {
+					this._taskKeeper.push(this._current);
+				}
+				this._current = null;
+			}
 			this.tryNext();
 		}
 		
