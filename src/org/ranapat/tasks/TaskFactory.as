@@ -35,7 +35,7 @@ package org.ranapat.tasks {
 				} else if (args[0] == undefined && args.length >= 2 && args[1] is Function) {
 					args.shift();
 					return new UndeterminedTask(args.shift(), args);
-				} if (args[0] is uint && args.length == 1) {
+				} else if (args[0] is uint && args.length == 1) {
 					return new TimeoutTask(args[0]);
 				} else {
 					TT.log(this, "[ " + args + " ] unknown arguments to create task from.");
