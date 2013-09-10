@@ -1,5 +1,6 @@
 package org.ranapat.tasks {
 	import flash.events.TimerEvent;
+	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.Timer;
 	
@@ -15,6 +16,8 @@ package org.ranapat.tasks {
 		
 		private var _lazyAutoStart:Timer;
 		
+		public var parameters:Dictionary;
+		
 		public function TaskQueue(uid:String = null) {
 			this._uid = uid? uid : this.getRandomUID().toString();
 			this._queue = new Vector.<Task>();
@@ -22,6 +25,8 @@ package org.ranapat.tasks {
 			
 			this._lazyAutoStart = new Timer(TaskQueueSettings.LAZY_START_TIMEOUT, 1);
 			this._lazyAutoStart.addEventListener(TimerEvent.TIMER, this.handleLazyAutoStartTimer, false, 0, true);
+			
+			this.parameters = new Dictionary(true);
 			
 			TT.log(this, this._uid + " created.");
 		}

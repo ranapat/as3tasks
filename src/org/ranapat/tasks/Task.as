@@ -38,8 +38,6 @@ package org.ranapat.tasks {
 			TT.log(this, this.uid + " started.");
 			this._started = true;
 			this._progress = 0;
-			
-			trace("....................................and here my queue is " + this.queue)
 		}
 		
 		public function stop():Boolean {
