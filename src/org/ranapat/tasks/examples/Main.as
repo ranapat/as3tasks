@@ -113,17 +113,36 @@ package org.ranapat.tasks.examples {
 			*/
 				
 			
+			/*
 			trace("++++++++++++++ " + TF.get("ffff"))
 			TF.get("ffff")
 				.push(new ExampleReleaseTask())
 				.push(TF.toTask(this.callbackTest1))
 				
 			TF.get("ffff").start()
+			*/
 			
 			//trace("??? " + TF.auto("ffff").complete)
 			//TF.auto("ffff").start()
+			
+			TF.auto("t1")
+				.push(TF.toTask(.112233))
+				.push(TF.toTask(this.justAfterCompelBlockTask))
+				
+			TF.auto("t2")
+				.push(TF.toTask(5))
+				.push(TF.toTask(this.triggerCompelBlockDeblock))
 				
 			
+		}
+		
+		public function triggerCompelBlockDeblock():void {
+			trace("we will try to deblock compel task with .112233")
+			TF.massCompel(.112233);
+		}
+		
+		public function justAfterCompelBlockTask():void {
+			trace("we are just after compel block task");
 		}
 		
 		private function enterFrame(e:Event):void {

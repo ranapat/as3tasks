@@ -37,6 +37,8 @@ package org.ranapat.tasks {
 					return new UndeterminedTask(args.shift(), args);
 				} else if (args[0] is uint && args.length == 1) {
 					return new TimeoutTask(args[0]);
+				} else if (args[0] is Number && args.length == 1) {
+					return new CompelBlockTask(args[0]);
 				} else {
 					TT.log(this, "[ " + args + " ] unknown arguments to create task from.");
 					return null;
@@ -64,6 +66,16 @@ package org.ranapat.tasks {
 				}
 			}
 			return tmp;
+		}
+		
+		public function massCompel(code:Number, stopOnCompel:Boolean = true):void {
+			for each (var taskQueue:TaskQueue in this._queues) {
+				if (taskQueue.compel(code)) {
+					if (stopOnCompel) {
+						return;
+					}
+				}
+			}
 		}
 		
 		private function onComplete(name:String):void {

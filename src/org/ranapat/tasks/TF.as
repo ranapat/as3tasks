@@ -14,6 +14,10 @@ package org.ranapat.tasks {
 			return TaskFactory.instance.get(name, auto);
 		}
 		
+		public static function massCompel(code:Number, stopOnCompel:Boolean = true):void {
+			TaskFactory.instance.massCompel(code, stopOnCompel);
+		}
+		
 		public static function destroy():void {
 			TaskFactory.instance.destroy();
 		}
